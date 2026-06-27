@@ -12,7 +12,7 @@ load_dotenv()
 # Configura tu clave API y ciudad.
 API_KEY = os.getenv("OPENWEATHER_API_KEY", "TU_API_KEY")
 CITY = "Madrid"
-URL = f"http://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}&units=metric"
+OPENWEATHER_URL = "https://api.openweathermap.org/data/2.5/weather"
 MODEL_PATH = Path("modelo_clima.pkl")
 
 
@@ -49,17 +49,19 @@ def predecir_clima(datos, modelo, features):
     return prediccion[0]
 
 
-def obtener_datos_clima():
+def obtener_datos_clima(ciudad=CITY):
     if API_KEY == "TU_API_KEY":
         print("No configuraste una API key. Usando datos de ejemplo para probar el modelo.")
         return {
+            "name": ciudad,
             "main": {"temp": 19, "humidity": 78, "pressure": 1010},
             "wind": {"speed": 4.2},
             "clouds": {"all": 80},
             "rain": {"1h": 1.1},
         }
 
-    response = requests.get(URL, timeout=10)
+    params = {"q": ciudad, "appid": API_KEY, "units": "metric"}
+    response = requests.get(OPENWEATHER_URL, params=params, timeout=10)
     response.raise_for_status()
     return response.json()
 
@@ -67,7 +69,7 @@ def obtener_datos_clima():
 def main():
     print("Obteniendo datos climaticos...")
     modelo, features = cargar_modelo()
-    api_data = obtener_datos_clima()
+    api_data = obtener_datos_clima(CITY)
     datos_procesados = procesar_datos(api_data)
 
     print("Datos procesados para el modelo:")

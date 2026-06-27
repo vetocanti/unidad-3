@@ -36,7 +36,7 @@ Este archivo se genera automaticamente al ejecutar el entrenamiento. Contiene el
 El proyecto usa estas librerias:
 
 ```bash
-pip install pandas numpy scipy scikit-learn joblib requests python-dotenv
+pip install -r requirements.txt
 ```
 
 
@@ -95,6 +95,25 @@ API_KEY = os.getenv("OPENWEATHER_API_KEY", "TU_API_KEY")
 ```
 
 Esto evita dejar la clave escrita directamente dentro del codigo.
+
+## Paso 4: usar la API con FastAPI
+
+Ejecuta:
+
+```bash
+uvicorn api_clima:app --reload
+```
+
+Luego abre la documentacion interactiva:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+Endpoints principales:
+
+- `GET /salud`: comprueba que el modelo se puede cargar.
+- `GET /predecir?ciudad=Madrid`: consulta OpenWeatherMap y devuelve la prediccion del modelo.
 
 ## Explicacion de `entrenar_modelo_clima.py`
 
